@@ -1,13 +1,17 @@
 from fastapi import FastAPI
-from routers import auth
-from domain import model
+from routers import client
 from database.db import db
 
 # App
-app = FastAPI()
+app = FastAPI(
+    title="Encontre o seu Mecánico",
+    description='API do site encontre o seu mecanico',
+    version="1.0.0",
+    swagger_ui_parameters={"defaultModelsExpandDepth": -1}
+)
 
 # Routers
-app.include_router(auth.router)
+app.include_router(client.router)
 
 # Events
 @app.on_event("startup")
