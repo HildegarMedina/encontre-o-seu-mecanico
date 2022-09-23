@@ -1,0 +1,18 @@
+#!/bin/sh
+
+branch=`git branch --show-current`
+
+while ! [ -e .git ] ; do
+    cd ..
+done
+
+echo 'Running tests and coverage...'
+if RUNNING_TESTS=1 coverage run --source=. -m pytest; then
+    coverage html 
+
+    echo 'Checking coverage...'
+    if coverage report -i --skip-covered --fail-under=100; then
+        exit 0
+    fi
+fi
+exit 2

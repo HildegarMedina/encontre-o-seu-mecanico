@@ -1,0 +1,25 @@
+#!/bin/bash
+
+if [ "$1" == "" ] ; then
+  echo Usage:
+  echo
+  echo -e "\033[1;32m  $0 server \033[0m              - run server (FastAPI)"
+  echo -e "\033[1;32m  $0 tests  \033[0m              - run tests  (pytest)"
+  exit 1
+fi
+
+if [ "$1" == "server" ] ; then
+    cd server
+    uvicorn app:app --host 0.0.0.0 --port 8000 --reload
+fi
+
+if [ "$1" == "tests" ] ; then
+    cd server
+    RUNNING_TESTS=1 coverage run --source=. -m pytest 
+    coverage html 
+    if command -v coveragepy-lcov; then
+        mkdir coverage 2> /dev/null
+        coveragepy-lcov --output_file_path coverage/lcov.info
+    fi
+    coverage report -i --skip-covered --fail-under=100
+fi

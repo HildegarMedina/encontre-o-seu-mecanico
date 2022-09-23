@@ -1,0 +1,9 @@
+#!/bin/bash
+while ! [ -e .git ] ; do
+    cd ..
+done
+git config advice.ignoredHook false
+cp hooks/verify_tests .git/hooks/pre-commit
+cp hooks/verify_tests .git/hooks/pre-commit-merge
+chmod +x .git/hooks/pre-commit
+chmod +x .git/hooks/pre-commit-merge
