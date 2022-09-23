@@ -113,5 +113,16 @@ class Maintenance(EntityBase, Base):
     response = Column(Integer, ForeignKey("maintenance_responses.id"))
 
 
+tables.append('mechanical_ratings')
+class Mechanical_Rating(EntityBase, Base):
+    """Mechanical_Rating model."""
+    __tablename__ = "mechanical_ratings"
+
+    rating = Column(Float)
+    maintenance = Column(Integer, ForeignKey("maintenances.id"))
+    mechanic = Column(Integer, ForeignKey("mechanics.id"))
+    comment = Column(String)
+
+
 # Create tables
 Base.metadata.create_all(engine)
