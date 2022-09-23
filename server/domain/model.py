@@ -1,6 +1,5 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, DateTime
+from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, Float
 from database.db import Base, engine
-from sqlalchemy.ext.declarative import declared_attr
 
 tables = []
 
@@ -77,6 +76,31 @@ class Service(EntityBase, Base):
 
     name = Column(String)
     description = Column(String)
+
+
+tables.append('maintenance_requests')
+class Maintenance_Request(EntityBase, Base):
+    """Maintenance_Request model."""
+    __tablename__ = "maintenance_requests"
+
+    car = Column(Integer, ForeignKey("cars.id"))
+    services = Column(String)
+    description = Column(String)
+    expires_at = Column(DateTime)
+    client = Column(Integer, ForeignKey("clients.id"))
+    mechanic = Column(Integer, ForeignKey("mechanics.id"))
+
+
+tables.append('maintenance_responses')
+class Maintenance_Response(EntityBase, Base):
+    """Maintenance_Response model."""
+    __tablename__ = "maintenance_responses"
+
+    status = Column(String)
+    request = Column(Integer, ForeignKey("maintenance_requests.id"))
+    price = Column(Float)
+    message = Column(String)
+    proposed_date = Column(DateTime)
 
 # Create tables
 Base.metadata.create_all(engine)
