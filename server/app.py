@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from routers import auth
+from domain import model
 from database.db import db
 
 # App

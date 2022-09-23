@@ -4,24 +4,16 @@ from sqlalchemy.ext.declarative import declared_attr
 
 tables = []
 
-class EntityBaseClients():
-    """Entity model."""
+class EntityBase():
+    """Entity base model."""
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     created_at = Column(DateTime)
-    @declared_attr
-    def created_by(cls):
-        return Column(Integer, ForeignKey("clients.id"))
-    modifiet_at = Column(DateTime)
-    @declared_attr
-    def modifiet_by(cls):
-        return Column(Integer, ForeignKey("clients.id"))
 
 tables.append('clients')
-class Client(Base):
+class Client(EntityBase, Base):
     """Client model."""
     __tablename__ = "clients"
 
-    id = Column(Integer, primary_key=True, index=True)
     full_name = Column(String)
     email = Column(String)
     password = Column(String)
@@ -34,15 +26,13 @@ class Client(Base):
     phone = Column(String)
     identification = Column(String)
     profile = Column(Integer, ForeignKey("profiles.id"))
-    created_at = Column(DateTime)
 
 
 tables.append('mechanics')
-class Mechanic(Base):
+class Mechanic(EntityBase, Base):
     """Mechanic model."""
     __tablename__ = "mechanics"
 
-    id = Column(Integer, primary_key=True, index=True)
     company_logo = Column(String)
     company_name = Column(String)
     full_name = Column(String)
@@ -58,17 +48,35 @@ class Mechanic(Base):
     identification = Column(String)
     services = Column(String)
     profile = Column(Integer, ForeignKey("profiles.id"))
-    created_at = Column(DateTime)
 
 tables.append('profiles')
-class Profile(Base):
+class Profile(EntityBase, Base):
     """profile model."""
     __tablename__ = "profiles"
 
-    id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
     description = Column(String)
-    created_at = Column(DateTime)
+
+
+tables.append('cars')
+class Car(EntityBase, Base):
+    """Car model."""
+    __tablename__ = "cars"
+
+    brand = Column(String)
+    model = Column(String)
+    version = Column(String)
+    year = Column(Integer)
+    client = Column(Integer, ForeignKey("clients.id"))
+
+
+tables.append('services')
+class Service(EntityBase, Base):
+    """Service model."""
+    __tablename__ = "services"
+
+    name = Column(String)
+    description = Column(String)
 
 # Create tables
 Base.metadata.create_all(engine)
