@@ -18,7 +18,7 @@ class EntityBaseClients():
 
 tables.append('clients')
 class Client(Base):
-    """client model."""
+    """Client model."""
     __tablename__ = "clients"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -33,6 +33,30 @@ class Client(Base):
     complement = Column(String)
     phone = Column(String)
     identification = Column(String)
+    profile = Column(Integer, ForeignKey("profiles.id"))
+    created_at = Column(DateTime)
+
+
+tables.append('mechanics')
+class Mechanic(Base):
+    """Mechanic model."""
+    __tablename__ = "mechanics"
+
+    id = Column(Integer, primary_key=True, index=True)
+    company_logo = Column(String)
+    company_name = Column(String)
+    full_name = Column(String)
+    email = Column(String)
+    password = Column(String)
+    zip_code = Column(Integer)
+    country = Column(String)
+    state = Column(String)
+    city = Column(String)
+    address = Column(String)
+    complement = Column(String)
+    phone = Column(String)
+    identification = Column(String)
+    services = Column(String)
     profile = Column(Integer, ForeignKey("profiles.id"))
     created_at = Column(DateTime)
 
