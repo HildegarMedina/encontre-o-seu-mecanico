@@ -102,5 +102,16 @@ class Maintenance_Response(EntityBase, Base):
     message = Column(String)
     proposed_date = Column(DateTime)
 
+
+tables.append('maintenances')
+class Maintenance(EntityBase, Base):
+    """Maintenance model."""
+    __tablename__ = "maintenances"
+
+    status = Column(String)
+    request = Column(Integer, ForeignKey("maintenance_requests.id"))
+    response = Column(Integer, ForeignKey("maintenance_responses.id"))
+
+
 # Create tables
 Base.metadata.create_all(engine)
