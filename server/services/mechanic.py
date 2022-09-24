@@ -1,7 +1,7 @@
 """Mechanic Service."""
 from datetime import datetime
 from fastapi import HTTPException
-
+import json
 from utils.auth import get_password_hash
 
 class MechanicService():
@@ -13,14 +13,19 @@ class MechanicService():
     async def get_mechanic_by_email(self, email):
         sql = "SELECT * FROM mechanics WHERE email = :email"
         values = {"email": email}
-        return await self.repo.fetch_one(sql, values)
+        mechanic = await self.repo.fetch_one(sql, values)
+        if mechanic:
+            mechanic = dict(mechanic)
+            mechanic["services"] = mechanic["services"].replace("\'", "\"")
+            mechanic["services"] = json.loads(mechanic["services"])
+        return mechanic
 
     async def register(self, mechanic):
         find_mechanic = await self.get_mechanic_by_email(mechanic.email)
         if not find_mechanic:
             await self.save(mechanic)
             mechanic = await self.get_mechanic_by_email(mechanic.email)
-            return mechanic.id
+            return mechanic["id"]
         raise HTTPException(409, "Mechanic already registered")
 
     async def save(self, mechanic):

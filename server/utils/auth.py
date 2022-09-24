@@ -2,7 +2,7 @@ from passlib.context import CryptContext
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-def get_user_auth(Authorization):
+def get_user_auth(Authorization, type):
     from services.auth import AuthService
     from schemas.request.auth import Authenticated
     from domain import model
@@ -11,7 +11,7 @@ def get_user_auth(Authorization):
     repo = Repository(db)
     auth = Authenticated(Authorization=Authorization)
     auth_svc = AuthService(model, repo)
-    user = auth_svc.me(auth.Authorization)
+    user = auth_svc.me(auth.Authorization, type)
     return user
 
 def verify_password(plain_password, hashed_password):

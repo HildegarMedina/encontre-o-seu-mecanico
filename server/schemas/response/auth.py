@@ -1,9 +1,10 @@
 from pydantic import BaseModel
-from typing import Union
+from typing import Optional, Union
 
-
-class ClientAccessTokenResponse(BaseModel):
+class AccessTokenResponse(BaseModel):
     id: int
+    company_logo: Optional[str]
+    company_name: Optional[str]
     full_name: str
     email: str
     zip_code: int
@@ -15,3 +16,4 @@ class ClientAccessTokenResponse(BaseModel):
     phone: str
     identification: str
     profile: Union[int, None]
+    services: Optional[list[str]]

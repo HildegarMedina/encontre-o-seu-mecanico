@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Header
 from domain import model
 from schemas.request.auth import Authentication
+from schemas.response.auth import AccessTokenResponse
 from services.auth import AuthService
 from database.db import db
 from repository.sql import Repository
@@ -13,12 +14,12 @@ router = APIRouter(
     tags=["Auth"]
 )
 
-@router.get("/me")
-async def me(Authorization: str = Header(...)):
-    return await get_user_auth(Authorization)
+@router.get("/me", response_model=AccessTokenResponse)
+async def me(type: str = 'client', Authorization: str = Header(...)):
+    return await get_user_auth(Authorization, type)
 
-@router.post('/client')
-async def authentication_client(auth: Authentication):
+@router.post('')
+async def authentication(auth: Authentication):
     """Authenticate a user."""
     auth_svc = AuthService(model, repo)
-    return await auth_svc.authenticate(auth.email, auth.password)
+    return await auth_svc.authenticate(auth.email, auth.password, auth.type)

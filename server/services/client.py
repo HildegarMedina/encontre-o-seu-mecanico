@@ -13,14 +13,17 @@ class ClientService():
     async def get_client_by_email(self, email):
         sql = "SELECT * FROM clients WHERE email = :email"
         values = {"email": email}
-        return await self.repo.fetch_one(sql, values)
+        client = await self.repo.fetch_one(sql, values)
+        if client:
+            client = dict(client)
+        return client
 
     async def register(self, client):
         find_client = await self.get_client_by_email(client.email)
         if not find_client:
             await self.save(client)
             client = await self.get_client_by_email(client.email)
-            return client.id
+            return client["id"]
         raise HTTPException(409, "User already registered")
 
     async def save(self, client):

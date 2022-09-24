@@ -5,6 +5,7 @@ class Authentication(BaseModel):
     """Authentication model."""
     email: str
     password: str
+    type: str
 
 class Authenticated(BaseModel):
     Authorization: str
