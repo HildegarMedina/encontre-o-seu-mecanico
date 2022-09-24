@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routers import client, auth
+from routers import client, auth, mechanic
 from database.db import db
 
 # App
@@ -12,6 +12,7 @@ app = FastAPI(
 
 # Routers
 app.include_router(client.router)
+app.include_router(mechanic.router)
 app.include_router(auth.router)
 
 # Events
