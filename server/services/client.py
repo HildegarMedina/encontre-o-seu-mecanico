@@ -11,7 +11,15 @@ class ClientService():
         self.repo = repo
     
     async def get_client_by_email(self, email):
-        sql = "SELECT * FROM clients WHERE email = :email"
+        sql = """
+            SELECT 
+                c.*, p.permissions, p.name as profile 
+            FROM 
+                clients c 
+            JOIN 
+                profiles p ON p.id = c.id 
+            WHERE 
+                c.email = :email"""
         values = {"email": email}
         client = await self.repo.fetch_one(sql, values)
         if client:
@@ -28,9 +36,9 @@ class ClientService():
 
     async def save(self, client):
         sql = """INSERT INTO clients (full_name, email, zip_code, password, country, state, city, 
-        address, complement, phone, identification,created_at) 
+        address, complement, phone, identification, created_at, profile) 
         VALUES(:full_name, :email, :zip_code, :password, :country, :state, :city, :address, :complement, 
-        :phone, :identification,:created_at)"""
+        :phone, :identification, :created_at, :profile)"""
         values = {
             "full_name": client.full_name,
             "email": client.email,
@@ -43,6 +51,7 @@ class ClientService():
             "complement": client.complement,
             "phone": client.phone,
             "identification": client.identification,
-            "created_at": datetime.now()
+            "created_at": datetime.now(),
+            "profile": 2
         }
         return await self.repo.execute(sql, values)

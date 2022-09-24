@@ -1,0 +1,4 @@
+DROP DATABASE encontre_o_seu_mecanico;
+DROP DATABASE encontre_o_seu_mecanico_test;
+CREATE DATABASE encontre_o_seu_mecanico;
+CREATE DATABASE encontre_o_seu_mecanico_test;

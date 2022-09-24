@@ -8,9 +8,22 @@ if [ "$1" == "" ] ; then
   exit 1
 fi
 
-if [ "$1" == "server" ] ; then
+if [ "$1" == "server" ] || [ "$1" == "server/" ] ; then
     cd server
     uvicorn app:app --host 0.0.0.0 --port 8000 --reload
+fi
+
+if [ "$1" == "script" ] ; then
+    if [ "$2" == "" ];then
+        echo "Missing script name."
+        exit 1
+    fi
+    venvactivate=../.venv/bin/activate
+    if [ -f $venvactivate ]; then
+        source $venvactivate
+    fi
+    cd server
+    python3 -m scripts.$2 ${@:3}
 fi
 
 if [ "$1" == "tests" ] ; then

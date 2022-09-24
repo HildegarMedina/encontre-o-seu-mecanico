@@ -15,5 +15,6 @@ class AccessTokenResponse(BaseModel):
     complement: str
     phone: str
     identification: str
-    profile: Union[int, None]
+    profile: Union[str, None]
+    permissions: str
     services: Optional[list[str]]

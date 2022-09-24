@@ -11,7 +11,15 @@ class MechanicService():
         self.repo = repo
 
     async def get_mechanic_by_email(self, email):
-        sql = "SELECT * FROM mechanics WHERE email = :email"
+        sql = """
+            SELECT 
+                m.*, p.permissions, p.name as profile 
+            FROM 
+                mechanics m 
+            JOIN 
+                profiles p ON p.id = m.id 
+            WHERE 
+                m.email = :email"""
         values = {"email": email}
         mechanic = await self.repo.fetch_one(sql, values)
         if mechanic:
@@ -30,9 +38,9 @@ class MechanicService():
 
     async def save(self, mechanic):
         sql = """INSERT INTO mechanics (company_logo, company_name, full_name, email, zip_code, password, 
-        country, state, city, address, complement, phone, identification,created_at, services) 
+        country, state, city, address, complement, phone, identification,created_at, services, profile) 
         VALUES(:company_logo, :company_name, :full_name, :email, :zip_code, :password, :country, :state, :city, 
-        :address, :complement, :phone, :identification,:created_at, :services)"""
+        :address, :complement, :phone, :identification,:created_at, :services, :profile)"""
         values = {
             "company_logo": mechanic.company_logo,
             "company_name": mechanic.company_name,
@@ -48,6 +56,7 @@ class MechanicService():
             "phone": mechanic.phone,
             "identification": mechanic.identification,
             "created_at": datetime.now(),
-            "services": str(mechanic.services)
+            "services": str(mechanic.services),
+            "profile": 3
         }
         return await self.repo.execute(sql, values)

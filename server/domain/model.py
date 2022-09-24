@@ -55,6 +55,7 @@ class Profile(EntityBase, Base):
 
     name = Column(String)
     description = Column(String)
+    permissions = Column(String)
 
 
 tables.append('cars')
