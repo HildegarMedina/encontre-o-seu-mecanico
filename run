@@ -28,7 +28,7 @@ fi
 
 if [ "$1" == "tests" ] ; then
     cd server
-    RUNNING_TESTS=1 coverage run --source=. -m pytest 
+    RUNNING_TESTS=1 coverage run --omit=scripts/* --source=. -m pytest
     coverage html 
     if command -v coveragepy-lcov; then
         mkdir coverage 2> /dev/null

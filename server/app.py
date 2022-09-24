@@ -11,9 +11,9 @@ app = FastAPI(
 )
 
 # Routers
+app.include_router(auth.router)
 app.include_router(client.router)
 app.include_router(mechanic.router)
-app.include_router(auth.router)
 
 # Events
 @app.on_event("startup")

@@ -17,7 +17,7 @@ class MechanicService():
             FROM 
                 mechanics m 
             JOIN 
-                profiles p ON p.id = m.id 
+                profiles p ON p.id = m.profile 
             WHERE 
                 m.email = :email"""
         values = {"email": email}

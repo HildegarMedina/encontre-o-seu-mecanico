@@ -17,7 +17,7 @@ class ClientService():
             FROM 
                 clients c 
             JOIN 
-                profiles p ON p.id = c.id 
+                profiles p ON p.id = c.profile 
             WHERE 
                 c.email = :email"""
         values = {"email": email}

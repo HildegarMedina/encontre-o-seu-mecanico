@@ -13,6 +13,17 @@
 - Nuxt.js
 - Bulma Components (Styles)
 
+### Instalar hooks de git
+
+> cd server
+
+> chmod +x hooks/install
+
+> ./hooks/install
+
+> cd ..
+
+
 ### Configurando el backend
 
 > python -m venv .venv

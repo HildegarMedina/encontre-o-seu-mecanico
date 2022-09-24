@@ -40,16 +40,24 @@ async def profiles(repo):
     await repo.execute_many(sql, profiles_seed)
     print(f"{len(profiles_seed)} profiles added")
 
-async def run():
-
-    await db.connect()
-    repo = Repository(db)
+async def seed(repo):
     
     # Truncate
     await repo.execute(query=f"TRUNCATE ONLY {', '.join(model.tables)};")
 
     # Seed profiles
     await profiles(repo)
+
+async def run():
+    
+    # Connect
+    await db.connect()
+
+    # Repo
+    repo = Repository(db)
+
+    # Seed
+    await seed(repo)
 
     # Disconnect
     await db.disconnect()
