@@ -7,7 +7,8 @@ while ! [ -e .git ] ; do
 done
 
 echo 'Running tests and coverage...'
-if RUNNING_TESTS=1 coverage run --source=. -m pytest; then
+cd server
+if RUNNING_TESTS=1 coverage run --omit=scripts/* --source=. -m pytest; then
     coverage html 
 
     echo 'Checking coverage...'

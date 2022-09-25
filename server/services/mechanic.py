@@ -60,3 +60,10 @@ class MechanicService():
             "profile": 3
         }
         return await self.repo.execute(sql, values)
+
+    async def delete(self, id):
+        sql = """DELETE FROM mechanics WHERE id = :id"""
+        values = {
+            "id": id,
+        }
+        return await self.repo.execute(sql, values)

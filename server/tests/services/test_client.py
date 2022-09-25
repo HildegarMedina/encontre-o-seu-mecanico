@@ -38,8 +38,8 @@ async def test_register_failed(setup):
     """Test the register failed."""
     repo, client = setup
 
-    # Register (User already registered)
+    # Register (Client already registered)
     client_svc = ClientService(model, repo)
     with pytest.raises(HTTPException) as exc_info:
         await client_svc.register(CreateClient(**clients_mock['john']))
-    assert exc_info.value.detail == 'User already registered'
+    assert exc_info.value.detail == 'Client already registered'

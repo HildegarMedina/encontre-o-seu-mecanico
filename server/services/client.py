@@ -32,7 +32,7 @@ class ClientService():
             await self.save(client)
             client = await self.get_client_by_email(client.email)
             return client["id"]
-        raise HTTPException(409, "User already registered")
+        raise HTTPException(409, "Client already registered")
 
     async def save(self, client):
         sql = """INSERT INTO clients (full_name, email, zip_code, password, country, state, city, 
