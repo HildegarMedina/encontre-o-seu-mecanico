@@ -11,6 +11,6 @@ class Repository:
 
     async def fetch_one(self, query, values=None):
         return await self.db.fetch_one(query=query, values=values)
-    
+"""     
     async def fetch_all(self, query, values=None):
-        return await self.db.fetch_all(query=query, values=values)
+        return await self.db.fetch_all(query=query, values=values) """

@@ -55,3 +55,10 @@ class ClientService():
             "profile": 2
         }
         return await self.repo.execute(sql, values)
+
+    async def delete(self, id):
+        sql = """DELETE FROM clients WHERE id = :id"""
+        values = {
+            "id": id,
+        }
+        return await self.repo.execute(sql, values)
