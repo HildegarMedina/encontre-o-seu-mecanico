@@ -2,6 +2,7 @@
 import sys
 import asyncio
 from datetime import datetime
+import os
 
 sys.path.append("..")
 
@@ -38,7 +39,8 @@ async def profiles(repo):
     sql = """INSERT INTO profiles (id, name, description, permissions, created_at) 
     VALUES(:id, :name, :description, :permissions, :created_at)"""
     await repo.execute_many(sql, profiles_seed)
-    print(f"{len(profiles_seed)} profiles added")
+    if not os.environ.get("RUNNING_TESTS"):
+        print(f"{len(profiles_seed)} profiles added")
 
 async def seed(repo):
     
