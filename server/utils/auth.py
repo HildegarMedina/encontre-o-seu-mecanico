@@ -1,4 +1,6 @@
 from passlib.context import CryptContext
+from fastapi import HTTPException
+import json
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -19,3 +21,8 @@ def verify_password(plain_password, hashed_password):
 
 def get_password_hash(password):
     return pwd_context.hash(password)
+
+def verify_permissions(permissions, permission):
+    permissions = json.loads(permissions)
+    if not permissions[permission]:
+        raise HTTPException(401, 'You do not have permissions to ' + permission.lower().replace('_', ' '))

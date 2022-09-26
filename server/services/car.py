@@ -1,8 +1,6 @@
 """Car Service."""
-from datetime import datetime
 from fastapi import HTTPException
 from schemas.request.car import AddCar, UpdateCar
-import json
 
 class CarService():
 

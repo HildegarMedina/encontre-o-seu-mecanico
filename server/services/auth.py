@@ -5,7 +5,6 @@ from services.client import ClientService
 from services.mechanic import MechanicService
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
-import json
 from schemas.response.auth import AccessTokenResponse
 from utils.auth import verify_password
 

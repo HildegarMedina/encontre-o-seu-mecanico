@@ -3,7 +3,6 @@ from domain import model
 import pytest
 from fastapi import HTTPException
 from server.schemas.request.car import AddCar, UpdateCar
-from server.schemas.request.client import CreateClient
 from server.schemas.response.auth import AccessTokenResponse
 from services.car import CarService
 from mockups.clients import clients_mock

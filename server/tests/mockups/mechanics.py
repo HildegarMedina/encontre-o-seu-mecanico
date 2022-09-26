@@ -15,7 +15,7 @@ mechanics_mock = {
         "identification": "70672659201",
         "services": [
             "Cambio de aceite",
-                "Cambios de cauchos"
+            "Cambios de cauchos"
         ]
     }
 }
