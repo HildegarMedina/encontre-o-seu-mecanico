@@ -2,16 +2,17 @@
 from domain import model
 import pytest
 from fastapi import HTTPException
-from server.schemas.request.car import AddCar, UpdateCar
-from server.schemas.response.auth import AccessTokenResponse
+from schemas.request.car import AddCar, UpdateCar
+from schemas.response.auth import AccessTokenResponse
+from tests.fixtures.admin import create_admin, destroy_admin
 from services.car import CarService
 from mockups.clients import clients_mock
 from mockups.car import cars_mock
-from fixtures.client import create_client
+from fixtures.client import create_client, destroy_client
 from fixtures.car import create_car, destroy_car
 
 @pytest.mark.asyncio
-async def test_get_listl(setup):
+async def test_get_list(setup):
     """Test the get list cars."""
     repo, client = setup
 
@@ -29,6 +30,28 @@ async def test_get_listl(setup):
     
     # Destroy car
     await destroy_car(cars_mock["vw/gol"], client_save, model, repo)
+    await destroy_client(client_save, model, repo)
+
+@pytest.mark.asyncio
+async def test_get_list_all(setup):
+    """Test the get list cars."""
+    repo, client = setup
+
+    # Create user
+    client_mock = clients_mock["john"].copy()
+    client_save = await create_admin(client_mock, model, repo)
+    
+    # Create car
+    await create_car(cars_mock["vw/gol"], client_save, model, repo)
+
+    # Get list
+    car_svc = CarService(model, repo, AccessTokenResponse(**client_save))
+    response = await car_svc.get_list(True)
+    assert len(response) > 0
+
+    # Destroy car
+    await destroy_car(cars_mock["vw/gol"], client_save, model, repo)
+    await destroy_admin(client_save, model, repo)
 
 @pytest.mark.asyncio
 async def test_get_car_by_id(setup):

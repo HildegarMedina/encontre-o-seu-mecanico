@@ -1,25 +1,28 @@
 """Car Service."""
 from fastapi import HTTPException
 from schemas.request.car import AddCar, UpdateCar
+from utils.auth import has_permissions
 
 class CarService():
 
-    def __init__(self, model, repo, client):
+    def __init__(self, model, repo, actor):
         self.model = model
         self.repo = repo
-        self.client = client
+        self.actor = actor
 
-    async def get_list(self):
+    async def get_list(self, all=False):
         sql = """
             SELECT 
                 *
             FROM 
                 cars 
-            WHERE 
-                client = :client"""
-        values = {
-            "client": self.client.id,
-        }
+            """
+        values = {}
+        if all:
+            has_permissions(self.actor.permissions, 'MANAGE_CARS', 'all')
+        else:
+            sql += "WHERE client = :client"
+            values["client"] = self.actor.id
         cars = await self.repo.fetch_all(sql, values)
         return cars
 
@@ -30,11 +33,12 @@ class CarService():
             FROM 
                 cars 
             WHERE 
-                client = :client and id = :id"""
-        values = {
-            "client": self.client.id,
-            "id": id,
-        }
+                id = :id
+            """
+        values = {"id": id}
+        if not has_permissions(self.actor.permissions, 'MANAGE_CARS', 'all', False):
+            sql += " and client = :client"
+            values["client"] = self.actor.id
         cars = await self.repo.fetch_one(sql, values)
         return cars
 
@@ -60,18 +64,18 @@ class CarService():
         return car
 
     async def add(self, car: AddCar):
-        find_car = await self.get_car_by_details(car.brand, car.model, car.version, car.year, self.client.id)
+        find_car = await self.get_car_by_details(car.brand, car.model, car.version, car.year, self.actor.id)
         if not find_car:
             await self.save(car)
-            car = await self.get_car_by_details(car.brand, car.model, car.version, car.year, self.client.id)
+            car = await self.get_car_by_details(car.brand, car.model, car.version, car.year, self.actor.id)
             return car["id"]
         raise HTTPException(409, "Car already registered")
 
     async def change_details(self, car: UpdateCar):
-        find_car = await self.get_car_by_details(car.brand, car.model, car.version, car.year, self.client.id)
+        find_car = await self.get_car_by_details(car.brand, car.model, car.version, car.year, self.actor.id)
         if not find_car:
             await self.update(car)
-            car = await self.get_car_by_details(car.brand, car.model, car.version, car.year, self.client.id)
+            car = await self.get_car_by_details(car.brand, car.model, car.version, car.year, self.actor.id)
             return car["id"]
         raise HTTPException(409, "Car already registered")
 
@@ -83,7 +87,7 @@ class CarService():
             "model": car.model,
             "version": car.version,
             "year": car.year,
-            "client": self.client.id
+            "client": self.actor.id
         }
         return await self.repo.execute(sql, values)
 
@@ -96,7 +100,7 @@ class CarService():
             "model": car.model,
             "version": car.version,
             "year": car.year,
-            "client": self.client.id
+            "client": self.actor.id
         }
         return await self.repo.execute(sql, values)
 
@@ -104,6 +108,6 @@ class CarService():
         sql = """DELETE FROM cars WHERE id = :id AND client = :client"""
         values = {
             "id": id,
-            "client": self.client.id
+            "client": self.actor.id
         }
         return await self.repo.execute(sql, values)

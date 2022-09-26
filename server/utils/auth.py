@@ -22,7 +22,11 @@ def verify_password(plain_password, hashed_password):
 def get_password_hash(password):
     return pwd_context.hash(password)
 
-def verify_permissions(permissions, permission):
+def has_permissions(permissions, permission, expected=None, raiseException=True):
     permissions = json.loads(permissions)
-    if not permissions[permission]:
-        raise HTTPException(401, 'You do not have permissions to ' + permission.lower().replace('_', ' '))
+    if ((permissions[permission] != expected and expected) or not permissions[permission]):
+        if not raiseException:
+            return False
+        else:
+            raise HTTPException(401, 'You do not have permissions to ' + permission.lower().replace('_', ' '))
+    return True

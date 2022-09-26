@@ -16,21 +16,21 @@ profiles_seed = [
         "id": 1,
         "name": 'admin',
         "description": "Administrador del sitio",
-        "permissions": '{"MANAGE_CLIENT": true, "MANAGE_MECHANICS": true, "MANAGE_PROFILES": true, "MANAGE_SERVICES": true, "MAINTENANCE_REQUEST": true, "MAINTENANCE_RESPONSE": true, "MANAGE_CARS": true, "MECHANICAL_RATING": true, "CLIENT_RATING": true}',
+        "permissions": '{"MANAGE_CLIENT": "all", "MANAGE_MECHANICS": "all", "MANAGE_PROFILES": "all", "MANAGE_SERVICES": "all", "MAINTENANCE_REQUEST": "all", "MAINTENANCE_RESPONSE": "all", "MANAGE_CARS": "all", "MECHANICAL_RATING": "all", "CLIENT_RATING": "all"}',
         "created_at": datetime.now()
     },
     {
         "id": 2,
         "name": 'client',
         "description": "Cliente",
-        "permissions": '{"MANAGE_CLIENT": false, "MANAGE_MECHANICS": false, "MANAGE_PROFILES": false, "MANAGE_SERVICES": false, "MAINTENANCE_REQUEST": true, "MAINTENANCE_RESPONSE": false, "MANAGE_CARS": true, "MECHANICAL_RATING": true, "CLIENT_RATING": false}',
+        "permissions": '{"MANAGE_CLIENT": false, "MANAGE_MECHANICS": false, "MANAGE_PROFILES": false, "MANAGE_SERVICES": false, "MAINTENANCE_REQUEST": "owned_only", "MAINTENANCE_RESPONSE": false, "MANAGE_CARS": "owned_only", "MECHANICAL_RATING": "owned_only", "CLIENT_RATING": false}',
         "created_at": datetime.now()
     },
     {
         "id": 3,
         "name": 'mechanic',
         "description": "Mecánico",
-        "permissions": '{"MANAGE_CLIENT": false, "MANAGE_MECHANICS": false, "MANAGE_PROFILES": false, "MANAGE_SERVICES": false, "MAINTENANCE_REQUEST": false, "MAINTENANCE_RESPONSE": true, "MANAGE_CARS": false, "MECHANICAL_RATING": false, "CLIENT_RATING": true}',
+        "permissions": '{"MANAGE_CLIENT": false, "MANAGE_MECHANICS": false, "MANAGE_PROFILES": false, "MANAGE_SERVICES": false, "MAINTENANCE_REQUEST": false, "MAINTENANCE_RESPONSE": "owned_only", "MANAGE_CARS": false, "MECHANICAL_RATING": false, "CLIENT_RATING": "owned_only"}',
         "created_at": datetime.now()
     }
 ]
