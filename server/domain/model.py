@@ -67,7 +67,7 @@ class Car(EntityBase, Base):
     model = Column(String)
     version = Column(String)
     year = Column(Integer)
-    client = Column(Integer, ForeignKey("clients.id"))
+    client = Column(Integer, ForeignKey("clients.id", ondelete='CASCADE'))
 
 
 tables.append('services')
@@ -84,12 +84,12 @@ class Maintenance_Request(EntityBase, Base):
     """Maintenance_Request model."""
     __tablename__ = "maintenance_requests"
 
-    car = Column(Integer, ForeignKey("cars.id"))
+    car = Column(Integer, ForeignKey("cars.id", ondelete='CASCADE'))
     services = Column(String)
     description = Column(String)
     expires_at = Column(DateTime)
-    client = Column(Integer, ForeignKey("clients.id"))
-    mechanic = Column(Integer, ForeignKey("mechanics.id"))
+    client = Column(Integer, ForeignKey("clients.id", ondelete='CASCADE'))
+    mechanic = Column(Integer, ForeignKey("mechanics.id", ondelete='CASCADE'))
 
 
 tables.append('maintenance_responses')
@@ -98,7 +98,7 @@ class Maintenance_Response(EntityBase, Base):
     __tablename__ = "maintenance_responses"
 
     status = Column(String)
-    request = Column(Integer, ForeignKey("maintenance_requests.id"))
+    request = Column(Integer, ForeignKey("maintenance_requests.id", ondelete='CASCADE'))
     price = Column(Float)
     message = Column(String)
     proposed_date = Column(DateTime)
@@ -110,8 +110,8 @@ class Maintenance(EntityBase, Base):
     __tablename__ = "maintenances"
 
     status = Column(String)
-    request = Column(Integer, ForeignKey("maintenance_requests.id"))
-    response = Column(Integer, ForeignKey("maintenance_responses.id"))
+    request = Column(Integer, ForeignKey("maintenance_requests.id", ondelete='CASCADE'))
+    response = Column(Integer, ForeignKey("maintenance_responses.id", ondelete='CASCADE'))
 
 
 tables.append('mechanical_ratings')
@@ -120,8 +120,8 @@ class Mechanical_Rating(EntityBase, Base):
     __tablename__ = "mechanical_ratings"
 
     rating = Column(Float)
-    maintenance = Column(Integer, ForeignKey("maintenances.id"))
-    mechanic = Column(Integer, ForeignKey("mechanics.id"))
+    maintenance = Column(Integer, ForeignKey("maintenances.id", ondelete='CASCADE'))
+    mechanic = Column(Integer, ForeignKey("mechanics.id", ondelete='CASCADE'))
     comment = Column(String)
 
 
@@ -131,8 +131,8 @@ class Client_Rating(EntityBase, Base):
     __tablename__ = "client_ratings"
 
     rating = Column(Float)
-    maintenance = Column(Integer, ForeignKey("maintenances.id"))
-    client = Column(Integer, ForeignKey("clients.id"))
+    maintenance = Column(Integer, ForeignKey("maintenances.id", ondelete='CASCADE'))
+    client = Column(Integer, ForeignKey("clients.id", ondelete='CASCADE'))
     comment = Column(String)
 
 

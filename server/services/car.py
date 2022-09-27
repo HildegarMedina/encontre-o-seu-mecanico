@@ -76,9 +76,7 @@ class CarService():
     async def change_details(self, car: UpdateCar):
         find_car = await self.get_car_by_details(car.brand, car.model, car.version, car.year, self.actor.id)
         if not find_car:
-            await self.update(car)
-            car = await self.get_car_by_details(car.brand, car.model, car.version, car.year, self.actor.id)
-            return car["id"]
+            return await self.update(car)
         raise HTTPException(409, "Car already registered")
 
     async def save(self, car):

@@ -36,7 +36,7 @@ async def add_car(car: AddCar,  Authorization: str = Header(...),):
     car_svc = CarService(model, repo, actor)
     return await car_svc.add(car)
 
-@router.put('')
+@router.put('', status_code=204)
 async def update_car(car: UpdateCar,  Authorization: str = Header(...),):
     """Update a car."""
     actor = await get_user_auth(Authorization, 'client')

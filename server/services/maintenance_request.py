@@ -54,8 +54,9 @@ class MaintenanceRequestService():
         await car_svc.get_car_by_id(maintenance_request.car)
         
         # Search mechanic
-        mechanic_svc = MechanicService(self.model, self.repo)
-        await mechanic_svc.get_mechanic_by_id(maintenance_request.mechanic)
+        if maintenance_request.mechanic:
+            mechanic_svc = MechanicService(self.model, self.repo)
+            await mechanic_svc.get_mechanic_by_id(maintenance_request.mechanic)
 
         # Save
         await self.save(maintenance_request)
@@ -86,8 +87,9 @@ class MaintenanceRequestService():
         await car_svc.get_car_by_id(maintenance_request.car)
         
         # Search mechanic
-        mechanic_svc = MechanicService(self.model, self.repo)
-        await mechanic_svc.get_mechanic_by_id(maintenance_request.mechanic)
+        if maintenance_request.mechanic:
+            mechanic_svc = MechanicService(self.model, self.repo)
+            await mechanic_svc.get_mechanic_by_id(maintenance_request.mechanic)
 
         # Update
         await self.update(maintenance_request)

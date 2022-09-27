@@ -74,6 +74,24 @@ async def test_get_car_by_id(setup):
     await destroy_car(cars_mock["vw/gol"], client_save, model, repo)
 
 @pytest.mark.asyncio
+async def test_get_car_by_id_failed(setup):
+    """Test the get car by id failed."""
+    repo, client = setup
+
+    # Create user
+    client_mock = clients_mock["john"].copy()
+    client_save = await create_client(client_mock, model, repo)
+
+    # Get car by id
+    car_svc = CarService(model, repo, AccessTokenResponse(**client_save))
+    with pytest.raises(HTTPException) as exc_info:
+        await car_svc.get_car_by_id(1234)
+    assert exc_info.value.detail == 'Car not found'
+    
+    # Destroy car
+    await destroy_client(client_mock, model, repo)
+
+@pytest.mark.asyncio
 async def test_get_car_by_details(setup):
     """Test the get car by details."""
     repo, client = setup
@@ -151,8 +169,8 @@ async def test_change_details(setup):
     car_mock = cars_mock["fiat/palio"].copy()
     car_mock['id'] = car_save['id']
     response = await car_svc.change_details(UpdateCar(**car_mock))
-    assert response > 0
-    
+    assert response == None
+
     # Destroy car
     await destroy_car(cars_mock["fiat/palio"], client_save, model, repo)
 
