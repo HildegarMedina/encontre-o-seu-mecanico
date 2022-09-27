@@ -39,8 +39,10 @@ class CarService():
         if not has_permissions(self.actor.permissions, 'MANAGE_CARS', 'all', False):
             sql += " and client = :client"
             values["client"] = self.actor.id
-        cars = await self.repo.fetch_one(sql, values)
-        return cars
+        car = await self.repo.fetch_one(sql, values)
+        if not car:
+            raise HTTPException(404, 'Car not found')
+        return car
 
     async def get_car_by_details(self, brand, model, version, year, client):
         sql = """

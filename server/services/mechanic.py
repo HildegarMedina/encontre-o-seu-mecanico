@@ -28,6 +28,25 @@ class MechanicService():
             mechanic["services"] = json.loads(mechanic["services"])
         return mechanic
 
+    async def get_mechanic_by_id(self, id):
+        sql = """
+            SELECT 
+                m.*, p.permissions, p.name as profile 
+            FROM 
+                mechanics m 
+            JOIN 
+                profiles p ON p.id = m.profile 
+            WHERE 
+                m.id = :id"""
+        values = {"id": id}
+        mechanic = await self.repo.fetch_one(sql, values)
+        if not mechanic:
+            raise HTTPException(404, 'Mechanic not found')
+        mechanic = dict(mechanic)
+        mechanic["services"] = mechanic["services"].replace("\'", "\"")
+        mechanic["services"] = json.loads(mechanic["services"])
+        return mechanic
+
     async def register(self, mechanic):
         find_mechanic = await self.get_mechanic_by_email(mechanic.email)
         if not find_mechanic:
