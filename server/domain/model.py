@@ -102,6 +102,7 @@ class Maintenance_Response(EntityBase, Base):
     price = Column(Float)
     message = Column(String)
     proposed_date = Column(DateTime)
+    mechanic = Column(Integer, ForeignKey("mechanics.id", ondelete='CASCADE'))
 
 
 tables.append('maintenances')

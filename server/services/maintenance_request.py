@@ -13,6 +13,22 @@ class MaintenanceRequestService():
         self.repo = repo
         self.actor = actor
 
+    async def get_list_by_status(self, status):
+        sql = """
+            SELECT 
+                mrq.*, mrs.status
+            FROM 
+                maintenance_requests mrq
+            LEFT JOIN
+                maintenance_responses mrs ON mrq.id = mrs.request
+            """
+        values = {}
+        sql += "WHERE mrq.mechanic = :mechanic OR mrq.mechanic is null"
+        values["mechanic"] = self.actor.id
+        sql += " ORDER BY id DESC"
+        cars = await self.repo.fetch_all(sql, values)
+        return cars
+
     async def get_list(self, all=False):
         sql = """
             SELECT 
@@ -64,8 +80,8 @@ class MaintenanceRequestService():
         return maintenance_requests[0].id
 
     async def save(self, maintenance_request):
-        sql = """INSERT INTO maintenance_requests (car, services, description, client, mechanic, expires_at) 
-        VALUES(:car, :services, :description, :client, :mechanic, :expires_at)"""
+        sql = """INSERT INTO maintenance_requests (car, services, description, client, mechanic, expires_at, created_at) 
+        VALUES(:car, :services, :description, :client, :mechanic, :expires_at, :created_at)"""
 
         values = {
             "car": maintenance_request.car,
@@ -73,7 +89,8 @@ class MaintenanceRequestService():
             "description": maintenance_request.description,
             "client": self.actor.id,
             "mechanic": maintenance_request.mechanic,
-            "expires_at": datetime.today() + timedelta(2)
+            "expires_at": datetime.today() + timedelta(2),
+            "created_at": datetime.today()
         }
         return await self.repo.execute(sql, values)
 

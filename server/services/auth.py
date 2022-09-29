@@ -45,15 +45,16 @@ class AuthService():
         try:
             payload = jwt.decode(Authorization, SECRET_KEY, algorithms=[ALGORITHM])
             email: str = payload.get("email")
+            profile: str = payload.get("profile")
             if email is None:
                 raise credentials_exception
         except JWTError:
             raise credentials_exception
-
-        if type == 'client':
+        user = None
+        if type == 'client' and profile == "client":
             user_svc = ClientService(self.model, self.repo)
             user = await user_svc.get_client_by_email(email)
-        elif type == 'mechanic':
+        elif type == 'mechanic' and profile == "mechanic":
             mechanic_svc = MechanicService(self.model, self.repo)
             user = await mechanic_svc.get_mechanic_by_email(email)
         if user is None:

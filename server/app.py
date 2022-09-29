@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routers import client, auth, mechanic, car, maintenance_request
+from routers import client, auth, mechanic, car, maintenance_request, maintenance_response
 from database.db import db
 
 # App
@@ -16,6 +16,7 @@ app.include_router(client.router)
 app.include_router(mechanic.router)
 app.include_router(car.router)
 app.include_router(maintenance_request.router)
+app.include_router(maintenance_response.router)
 
 # Events
 @app.on_event("startup")
